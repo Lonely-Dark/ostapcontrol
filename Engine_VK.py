@@ -21,4 +21,4 @@ class Engine(Requests):
 	pass
 
 
-vk = Engine("sorry.ini", 5.3131)
+vk = Engine()
