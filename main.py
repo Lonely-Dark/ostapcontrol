@@ -5,7 +5,7 @@
 # Python 3.9.6
 
 import logging
-from Engine_VK import Engine
+from Engine_VK import vk
 
 main_logger = logging.getLogger('main')
 main_logger.setLevel(logging.DEBUG)
@@ -25,20 +25,19 @@ main_logger.addHandler(console_handler)
 
 main_logger.info("Starting")
 
-engine = Engine()
-engine.getLongPollServer()
+vk = vk()
+vk.getLongPollServer()
 
 running = True
-stack_events = []
 
 while running:
-	engine.requestLongPollServer()
+	vk.requestLongPollServer()
 
-	if len(engine.event['updates']) == 0:
+	if len(vk.event['updates']) == 0:
 		main_logger.debug("Updates 0, request to vk again...")
 		continue
 
-	main_logger.debug(engine.event)
+	main_logger.debug(vk.event)
 
 
-	engine.ts = engine.event['ts']
+	vk.ts = vk.event['ts']
