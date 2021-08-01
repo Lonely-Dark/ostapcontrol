@@ -25,10 +25,13 @@ class Requests:
 		# Parameters update for sync_vk_request
 		self.params_update = {'access_token': self.config['DEFAULT']['token'], 'v': version}
 
+		# Check default values
 		if configname == "conf.ini" and version == 5.131:
 			self.logger.info("Use default values for config name and version")
 	
 	def sync_vk_request(self, method, parameters, update=True):
+		""" Sync request to api.vk.com with method and parameters """
+
 		if update:
 			parameters.update(self.params_update)
 			self.logger.debug("Parameters updated: %s" % parameters)
@@ -36,6 +39,7 @@ class Requests:
 		return requests.get(f"https://api.vk.com/method/{method}", params=parameters).json()
 
 	def sync_request(self, server, parameters):
+		""" Sync request to server with parameters """
 		return requests.get(server, params=parameters).json()
 
 if __name__ == "__main__":
