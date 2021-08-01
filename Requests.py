@@ -39,6 +39,8 @@ class Requests:
 		return requests.get(server, params=parameters).json()
 
 if __name__ == "__main__":
+	requests_logger.setLevel(logging.DEBUG)
+	requests_logger.addHandler(logging.StreamHandler())
 	requests_logger.debug("Using module as main program")
 	requests_logger.debug("Create simple request to VK server")
 
@@ -47,4 +49,4 @@ if __name__ == "__main__":
 
 	if 'error' in trash['response']:
 		requests_logger.critical("Error in trash: %s" % trash)
-	requests_logger.info("all clear.")
+	requests_logger.info("Done.")

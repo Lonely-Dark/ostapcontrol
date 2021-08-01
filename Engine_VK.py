@@ -34,3 +34,13 @@ class Engine(Requests):
 
 	def requestLongPollServer(self):
 		self.event = self.sync_request(self.__server, {'act': 'a_check', 'wait': 40, 'key': self.__key, 'ts': self.ts})
+
+if __name__ == "__main__":
+	module.setLevel(logging.DEBUG)
+	module.addHandler(logging.StreamHandler())
+	module.info("Using module as a main program")
+	
+	eng = Engine()
+	eng.getLongPollServer()
+	eng.requestLongPollServer()
+	module.debug("eng.event")
