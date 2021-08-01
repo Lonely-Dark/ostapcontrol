@@ -23,4 +23,22 @@ console_handler.setFormatter(formatter)
 main_logger.addHandler(file_handler)
 main_logger.addHandler(console_handler)
 
-main_logger.info("Start...")
+main_logger.info("Starting")
+
+engine = Engine()
+engine.getLongPollServer()
+
+running = True
+stack_events = []
+
+while running:
+	engine.requestLongPollServer()
+
+	if len(engine.event['updates']) == 0:
+		main_logger.debug("Updates 0, request to vk again...")
+		continue
+
+	main_logger.debug(engine.event)
+
+
+	engine.ts = engine.event['ts']

@@ -17,6 +17,7 @@ class Engine(Requests):
 		# Create registrator with name engine.Engine
 		self.logger = logging.getLogger('main.engine.Engine')
 		self.logger.debug('__init__ class Engine')
+		super().__init__()
 
 	def getLongPollServer(self):
 		""" Get the longpoll server and set server, key, ts """
@@ -27,9 +28,9 @@ class Engine(Requests):
 			self.logger.critical("getLongPollServer error: %s" % response)
 			return 1
 
-		self.__key, self.__server, self.__ts = response['response'].values()
-		self.logger.debug("Get server, key, ts: %s %s %s" % (self.__server, self.__key, self.__ts))
+		self.__key, self.__server, self.ts = response['response'].values()
+		self.logger.debug("Get server, key, ts: %s %s %s" % (self.__server, self.__key, self.ts))
 
 
 	def requestLongPollServer(self):
-		pass
+		self.event = self.sync_request(self.__server, {'act': 'a_check', 'wait': 40, 'key': self.__key, 'ts': self.ts})
