@@ -12,6 +12,7 @@ from configparser import ConfigParser
 requests_logger = logging.getLogger('main.requests')
 
 class Requests:
+	""" Request to servers, base for all classes """
 	
 	def __init__(self, configname = "conf.ini", version = 5.131):
 		

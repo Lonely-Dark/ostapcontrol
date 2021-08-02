@@ -8,15 +8,18 @@ import requests
 import logging
 from Requests import Requests
 
-# Create registrator with name engine
+# Create registrator with name main.engine
 module = logging.getLogger('main.engine')
 
 class Engine(Requests):
+	""" Engine for VK """
 
 	def __init__(self):
-		# Create registrator with name engine.Engine
+		# Create registrator with name main.engine.Engine
 		self.logger = logging.getLogger('main.engine.Engine')
 		self.logger.debug('__init__ class Engine')
+
+		# Requests.__init__()
 		super().__init__()
 
 	def getLongPollServer(self):
@@ -33,6 +36,7 @@ class Engine(Requests):
 
 
 	def requestLongPollServer(self):
+		""" Get event """
 		self.event = self.sync_request(self.__server, {'act': 'a_check', 'wait': 40, 'key': self.__key, 'ts': self.ts})
 
 if __name__ == "__main__":
