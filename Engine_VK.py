@@ -54,4 +54,4 @@ if __name__ == "__main__":
     eng = Engine()
     eng.get_long_poll_server()
     eng.request_long_poll_server()
-    module.debug("eng.event")
+    module.debug(eng.event)
