@@ -5,7 +5,7 @@
 # Python 3.9.6
 
 import logging
-from Engine_VK import vk
+from Engine_VK import Engine
 
 # Create registrator with name main
 main_logger = logging.getLogger('main')
@@ -19,8 +19,11 @@ file_handler.setLevel(logging.DEBUG)
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 
+fmt = '[%(asctime)s] [%(filename)s] [%(levelname)s] [%(lineno)d]: %(message)s'
+
 # Set formatter to handlers
-formatter = logging.Formatter(fmt = '[%(asctime)s] [%(filename)s] [%(levelname)s] [%(lineno)d] [%(funcName)s]: %(message)s',datefmt = '%Y-%m-%d %H:%M:%S')
+formatter = logging.Formatter(fmt=fmt, datefmt='%Y-%m-%d %H:%M:%S')
+
 file_handler.setFormatter(formatter)
 console_handler.setFormatter(formatter)
 
@@ -30,24 +33,21 @@ main_logger.addHandler(console_handler)
 
 main_logger.info("Starting")
 
-vk = vk()
-vk.getLongPollServer()
+vk = Engine()
+vk.get_long_poll_server()
 
 running = True
 
 while running:
-	vk.requestLongPollServer()
+    vk.request_long_poll_server()
 
-	# Check if events == 0
-	if len(vk.event['updates']) == 0:
-		main_logger.debug("Updates 0, request to vk again...")
-		continue
+    # Check if events == 0
+    if len(vk.event['updates']) == 0:
+        main_logger.debug("Updates 0, request to vk again...")
+        continue
 
-	main_logger.debug(vk.event)
+    main_logger.debug(vk.event)
 
-
-
-
-	vk.ts = vk.event['ts']
+    vk.ts = vk.event['ts']
 
 main_logger.info("Close the program")
