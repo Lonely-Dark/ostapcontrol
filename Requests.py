@@ -23,6 +23,7 @@ class Requests:
         # Parse config
         self.config = ConfigParser()
         self.config.read(configname)
+        self.CREATOR = int(self.config['DEFAULT']['creator'])
 
         # Parameters update for sync_vk_request
         self.params_update = {'access_token': self.config['DEFAULT']['token'],

@@ -6,6 +6,7 @@
 
 import logging
 from Engine_VK import Engine
+from Handler import Handler
 
 # Create registrator with name main
 main_logger = logging.getLogger('main')
@@ -34,6 +35,8 @@ main_logger.addHandler(console_handler)
 main_logger.info("Starting")
 
 vk = Engine()
+handler = Handler()
+
 vk.get_long_poll_server()
 
 running = True
@@ -46,7 +49,7 @@ while running:
         main_logger.debug("Updates 0, request to vk again...")
         continue
 
-    main_logger.debug(vk.event)
+    handler.handle(vk.event['updates'])
 
     vk.ts = vk.event['ts']
 
