@@ -46,7 +46,7 @@ class Handler(Requests):
             admins = list(map(str, admins))
             self.logger.debug(admins)
             self.config[str(self.peer_id)]['admins'] = ' '.join(admins)
-            
+
             with open("conf.ini", "w") as file:
                 self.config.write(file)
 
