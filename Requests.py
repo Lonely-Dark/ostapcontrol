@@ -15,7 +15,7 @@ requests_logger = logging.getLogger('main.requests')
 class Requests:
     """ Request to servers, base for all classes """
 
-    def __init__(self, configname="conf.ini", version=5.131):
+    def __init__(self, configname="conf.ini", version=5.144):
 
         # Create registrator with name requests.Requests
         self.logger = logging.getLogger('main.requests.Requests')

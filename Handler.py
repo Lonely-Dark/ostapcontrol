@@ -33,6 +33,23 @@ class Handler(Requests):
         self.text_lw = self.text.lower()
         self.text_spl_lw = self.text_lw.split()
 
+        if str(self.peer_id) not in self.config:
+            self.config[str(self.peer_id)] = {}
+            temp = self.sync_vk_request("messages.getConversationMembers",
+                                        {'peer_id': self.peer_id,
+                                         'count': 200})
+            if 'error' in temp:
+                self.logger.debug("Error in tmp")
+                self._handle()
+            self.logger.debug(temp)
+            admins = [temp['response']['items'][i]['member_id'] for i in range(len(temp['response']['items'])) if 'is_admin' in temp['response']['items'][i]]
+            admins = list(map(str, admins))
+            self.logger.debug(admins)
+            self.config[str(self.peer_id)]['admins'] = ' '.join(admins)
+            
+            with open("conf.ini", "w") as file:
+                self.config.write(file)
+
         self._handle()
 
     def _handle(self):
