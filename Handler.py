@@ -9,7 +9,7 @@ import logging
 import sys
 from io import StringIO
 from traceback import format_exc
-from random import getrandbits
+from Commands import Commands
 
 # Create registrator with name main.handler
 module = logging.getLogger("main.handler")
@@ -20,6 +20,7 @@ class Handler(Requests):
     def __init__(self):
         self.logger = logging.getLogger("main.handler.Handler")
         self.logger.debug("__init__ class Handler")
+        self.commands = Commands()
 
         super().__init__()
 
@@ -42,8 +43,14 @@ class Handler(Requests):
                 self.logger.debug("Error in tmp")
                 self._handle()
             self.logger.debug(temp)
-            admins = [temp['response']['items'][i]['member_id'] for i in range(len(temp['response']['items'])) if 'is_admin' in temp['response']['items'][i]]
-            admins = list(map(str, admins))
+
+            temp = temp['response']['items']
+            admins = []
+
+            for i in range(len(temp)):
+                if 'is_admin' in temp[i]:
+                    admins.append(str(temp[i]['member_id']))
+
             self.logger.debug(admins)
             self.config[str(self.peer_id)]['admins'] = ' '.join(admins)
 
@@ -67,8 +74,23 @@ class Handler(Requests):
             sys.stdout.seek(0)
             data = sys.stdout.read()
 
-            self.sync_vk_request("messages.send",
-                                 {'random_id': getrandbits(64),
-                                  'peer_id': self.peer_id, 'message': data})
+            self.commands.send_message(data, self.peer_id)
 
             sys.stdout, sys.stderr = out, error
+
+        elif self.from_id != self.CREATOR and self.text_spl_lw[0] == 'py':
+            self.commands.send_message('Не-не-не ты не создатель, я запрещаю',
+                                       self.peer_id)
+
+        if self.text_lw == 'остап админы':
+            admins = self.config[str(self.peer_id)]['admins'].split()
+            
+            admins_users = [admins[i] for i in range(len(admins)) if int(admins[i]) > 0]
+            admins_groups = [admins[i] for i in range(len(admins)) if int(admins[i]) < 0]
+            
+            admins_users = ['@id'+admins_users[i]+'\n' for i in range(len(admins_users))]
+            admins_groups = ['@public'+admins_groups[i]+'\n' for i in range(len(admins_groups))]
+            
+            self.commands.send_message(f"Админы юзеры:\n {''.join(admins_users)}\nАдмины группы:{''.join(admins_groups)}", self.peer_id)
+
+
