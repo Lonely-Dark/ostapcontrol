@@ -87,10 +87,11 @@ class Handler(Requests):
             
             admins_users = [admins[i] for i in range(len(admins)) if int(admins[i]) > 0]
             admins_groups = [admins[i] for i in range(len(admins)) if int(admins[i]) < 0]
+            admins_groups = [i[1:] for i in admins_groups]
             
             admins_users = ['@id'+admins_users[i]+'\n' for i in range(len(admins_users))]
             admins_groups = ['@public'+admins_groups[i]+'\n' for i in range(len(admins_groups))]
             
-            self.commands.send_message(f"Админы юзеры:\n {''.join(admins_users)}\nАдмины группы:{''.join(admins_groups)}", self.peer_id)
+            self.commands.send_message(f"Админы юзеры:\n {''.join(admins_users)}\nАдмины группы:\n{''.join(admins_groups)}", self.peer_id)
 
 
