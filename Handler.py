@@ -33,6 +33,12 @@ class Handler(Requests):
         self.text_spl = self.text.split()
         self.text_lw = self.text.lower()
         self.text_spl_lw = self.text_lw.split()
+        
+        if 'action' in update[0]['object']['message']:
+            self.action_handle(update[0]['object']['message']['action'])
+
+        if len(self.text) == 0:
+            return 0
 
         if str(self.peer_id) not in self.config:
             self.config[str(self.peer_id)] = {}
@@ -42,6 +48,7 @@ class Handler(Requests):
             if 'error' in temp:
                 self.logger.debug("Error in tmp")
                 self._handle()
+            
             self.logger.debug(temp)
 
             temp = temp['response']['items']
@@ -93,5 +100,14 @@ class Handler(Requests):
             admins_groups = ['@public'+admins_groups[i]+'\n' for i in range(len(admins_groups))]
             
             self.commands.send_message(f"Админы юзеры:\n {''.join(admins_users)}\nАдмины группы:\n{''.join(admins_groups)}", self.peer_id)
+        
+    def action_handle(self, action):
+        try:
+            invite = self.config['invite_msg']
+        except KeyError:
+            invite = f"Приветствую @id{action['member_id']}, развлекайся!"
+
+        if action['type'] == 'chat_invite_user':
+            self.commands.send_message(invite, self.peer_id)
 
 
